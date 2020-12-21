@@ -4,7 +4,7 @@
 //
 //  Created by 지영본 on 2020/07/28.
 //  Copyright © 2020 지영본. All rights reserved.
-//
+//  acmicpc.net/problem/1024
 
 #include <iostream>
 
