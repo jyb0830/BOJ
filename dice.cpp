@@ -4,7 +4,7 @@
 //
 //  Created by 지영본 on 2020/07/31.
 //  Copyright © 2020 지영본. All rights reserved.
-//
+//  acmicpc.net/problem/1041
 
 //1차 오류 : 주사위 맞은편 칸을 고려하지 않고 최솟값 3개만을 찾음
 //2차 오류 : index 초기화 실수
