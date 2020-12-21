@@ -4,7 +4,7 @@
 //
 //  Created by 지영본 on 2020/07/30.
 //  Copyright © 2020 지영본. All rights reserved.
-//
+//  acmicpc.net/problem/1025
 // 행과 열이 모두 등차수열을 이루는 수를 나열했을 때, 제곱이 되는 수
 
 #include <iostream>
