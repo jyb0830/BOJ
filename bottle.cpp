@@ -10,21 +10,23 @@
 using namespace std;
 
 int main(){
-    int N,K,purchase=0, num1;
+    int N,K,purchase=0, num1=0;
     
     cin>>N>>K;
-    
+    if(N<=0 || K<=0 || N>10000000 || K>1000)
+        cout<<"-1";
+    else{
     while(1){
         num1=0;
-        for(int i=N;i>0;i-=i&-i) num1++;
+        for(int i=N;i>0;i-=i&-i)
+            num1++;
         if(num1<=K) break;
         
         purchase += N&-N;
         N += N&-N;
     }
-    if(purchase==0)
-        cout<<"-1";
-    else
         cout<<purchase;
+    }
+        
     return 0;
 }
