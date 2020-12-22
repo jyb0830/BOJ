@@ -2,54 +2,29 @@
 //  bottle.cpp
 //  baekjoon
 //
-//  Created by 지영본 on 2020/08/02.
+//  Created by 지영본 on 2020/12/22.
 //  Copyright © 2020 지영본. All rights reserved.
 //  acmicpc.net/problem/1052
-
 #include <iostream>
-#include <stack>
-#include <math.h>
+
 using namespace std;
 
 int main(){
-    int N,K,n=0,a=0,temp,num=1,sum_a=0;
-    stack<int> s, temp_s;
-    
+    int N,K,purchase=0, num1;
     
     cin>>N>>K;
     
-    temp=N;
-    while(temp!=0)
-    {
-        s.push(temp%2);
-        if(temp%2==1)
-            n++;
-        temp=temp/2;
-    }
-    if(K>=n)
-        cout<<-1<<"\n";
-    else{
-        temp_s=s;
-        while(temp_s.top()==1)
-        {
-            temp_s.pop();
-            a++;
-            if(temp_s.empty())
-                break;
-        }
+    while(1){
+        num1=0;
+        for(int i=N;i>0;i-=i&-i) num1++;
+        if(num1<=K) break;
         
-        if(K<=a)
-        {
-            while(num<N)
-                num*=2;
-            cout<<num-N<<"\n";
-        }
-        else
-        {
-            for(int i=0;i<temp_s.size()-1;i++)
-                num*=2;
-            cout<<num<<"\n";
-        }
+        purchase += N&-N;
+        N += N&-N;
     }
+    if(purchase==0)
+        cout<<"-1";
+    else
+        cout<<purchase;
     return 0;
 }
