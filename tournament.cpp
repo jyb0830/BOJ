@@ -31,8 +31,9 @@ int main(){
         }
         else if(Kim>pow(2,i) && Lim>pow(2,i)){
             Kim=Kim%(int)pow(2,i);
+            if(Kim==0) Kim=pow(2,i);
             Lim=Lim%(int)pow(2,i);
-            
+            if(Lim==0) Lim=pow(2,i);
         }
         
     }
