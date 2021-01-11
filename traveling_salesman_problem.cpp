@@ -10,26 +10,26 @@
 using namespace std;
 int map[16][16];
 int cost[16][1<<16];
-int N,min_cost=16000001;
+int N,min_cost=1600000000;
 int min(int a, int b){
-    return a>b?b:a;
+    return (a>b)?b:a;
 }
 
-int dfs(int start,int path){
-    if(path==(1<<N)-1){
-        if(map[start][0]!=0)
-            min_cost = min(min_cost, cost[start][path] + map[start][0]);
+int tsp(int curr,int path){
+    if(cost[curr][path]!=0) return cost[curr][path]; // 현재 도시를 포함한 경로에서, 모든 도시를 순회하고 첫 번째 도시로 가는 최단거리가 구해져 있으면 그 값을 그대로 반환한다
+    
+    if(path==(1<<N)-1){     //모든 도시를 방문했을 때, 마지막 도시에서 처음 도시로 가는 비용을 반환
+        if(map[curr][0]!=0)
+            return map[curr][0];
+        return 160000000;
     }
+    min_cost=160000000;
     for(int i=0;i<N;i++){
-        if(((1<<i)&path)==0){       //지나치지 않은 도시일 때
-            if(cost[i][path+(1<<i)]==0) //
-                cost[i][path+(1<<i)]=cost[start][path]+map[start][i];
-            else
-                cost[i][path+(1<<i)] = min(cost[i][path+(1<<i)], cost[start][path]+map[start][i]);
-            
-            dfs(i,path+(1<<i));
-        }
+        if(map[curr][i]==0||((1<<i)&path)!=0) continue;
+        min_cost = min(min_cost, map[curr][i]+tsp(i,path|(1<<i)));
     }
+    cost[curr][path]=min_cost;
+    
     return min_cost;
 }
 
@@ -41,5 +41,5 @@ int main(){
             cin>>map[i][j];
         }
     }
-    cout<<dfs(0,1);
+    cout<<tsp(0,1);
 }
