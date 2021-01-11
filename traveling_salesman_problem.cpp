@@ -8,29 +8,31 @@
 #include <iostream>
 
 using namespace std;
+
+#define INF 987654321
+
 int map[16][16];
 int cost[16][1<<16];
-int N,min_cost=1600000000;
-int min(int a, int b){
-    return (a>b)?b:a;
-}
+int N;
+
 
 int tsp(int curr,int path){
-    if(cost[curr][path]!=0) return cost[curr][path]; // 현재 도시를 포함한 경로에서, 모든 도시를 순회하고 첫 번째 도시로 가는 최단거리가 구해져 있으면 그 값을 그대로 반환한다
+    int result = cost[curr][path];
+    if(result!=0) return result; // 현재 도시를 포함한 경로에서, 모든 도시를 순회하고 첫 번째 도시로 가는 최단거리가 구해져 있으면 그 값을 그대로 반환한다
     
-    if(path==(1<<N)-1){     //모든 도시를 방문했을 때, 마지막 도시에서 처음 도시로 가는 비용을 반환
+    if(path==((1<<N)-1)){     //모든 도시를 방문했을 때, 마지막 도시에서 처음 도시로 가는 비용을 반환
         if(map[curr][0]!=0)
             return map[curr][0];
-        return 160000000;
+        return INF;
     }
-    min_cost=160000000;
+    result=INF;
     for(int i=0;i<N;i++){
         if(map[curr][i]==0||((1<<i)&path)!=0) continue;
-        min_cost = min(min_cost, map[curr][i]+tsp(i,path|(1<<i)));
+        result = min(result, map[curr][i]+tsp(i,path|(1<<i)));
     }
-    cost[curr][path]=min_cost;
+    cost[curr][path]=result;
     
-    return min_cost;
+    return result;
 }
 
 int main(){
