@@ -3,44 +3,46 @@
 //  BOJ
 //
 //  Created by 지영본 on 2021/01/10.
-//
+//  acmicpc.net/problem/1029
 
 #include <iostream>
 #include <vector>
 using namespace std;
 
 int artist[15][15];
-int visited[15][(1<<15)-1];
+int visited[15][(1<<15)-1][10];
 int N;
 
 
 int dp(int current, int path, int price){
     int cnt=0;
+    
+    if(path==(1<<N)-1) return N;
+    
     for(int i=0;i<N;i++){
-        if(artist[current][i]>=price)
+        if(artist[current][i]>=price && ((1<<i)&path)==0)
             cnt++;
     }
     if(cnt==0){
-        for(int i=0;i<15;i++){
+        for(int i=0;i<N;i++){
             if((i&path)!=0)
                 cnt++;
         }
-        visited[current][path]=cnt;
+        visited[current][path][price]=cnt;
         return cnt;
     }
     
-    if(visited[current][path]!=0)
-        return visited[current][path];
+    if(visited[current][path][price]!=0)
+        return visited[current][path][price];
     
     int result=0;
     
     for(int i=0;i<N;i++){
         if(((1<<i)&path)!=0||artist[current][i]<price)
             continue;;
-        result=max(result, dp(current, path|(1<<i), artist[current][i]));
-        
+        result=max(result, dp(i, path|(1<<i), artist[current][i]));
     }
-    visited[current][path]=result;
+    visited[current][path][price]=result;
     return result;
 }
 
