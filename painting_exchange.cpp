@@ -15,34 +15,20 @@ int N;
 
 
 int dp(int current, int path, int price){
-    int cnt=0;
+    int &result = visited[current][path][price];
     
-    if(path==(1<<N)-1) return N;
+    if(path==(1<<N)-1)
+        return 1;
     
-    for(int i=0;i<N;i++){
-        if(artist[current][i]>=price && ((1<<i)&path)==0)
-            cnt++;
-    }
-    if(cnt==0){
-        for(int i=0;i<N;i++){
-            if((i&path)!=0)
-                cnt++;
-        }
-        visited[current][path][price]=cnt;
-        return cnt;
-    }
+    if(result!=0)
+        return result;
     
-    if(visited[current][path][price]!=0)
-        return visited[current][path][price];
-    
-    int result=0;
-    
+    result=1;
     for(int i=0;i<N;i++){
         if(((1<<i)&path)!=0||artist[current][i]<price)
             continue;;
-        result=max(result, dp(i, path|(1<<i), artist[current][i]));
+        result=max(result, dp(i, path|(1<<i), artist[current][i])+1);
     }
-    visited[current][path][price]=result;
     return result;
 }
 
