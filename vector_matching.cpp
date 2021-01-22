@@ -5,8 +5,6 @@
 //  Created by 지영본 on 2020/12/30.
 //  acmicpc.net/problem/1007
 
-
-
 #include <iostream>
 #include <cmath>
 using namespace std;
