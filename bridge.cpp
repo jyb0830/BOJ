@@ -1,39 +1,27 @@
 //
 //  bridge.cpp
-//  baekjoon
+//  BOJ
 //
-//  Created by 지영본 on 2020/07/02.
-//  Copyright © 2020 지영본. All rights reserved.
-//
+//  Created by 지영본 on 2021/01/25.
+//  acmicpc.net/problem/1010
 
 #include <iostream>
+#include <stdio.h>
 using namespace std;
 
-int bridge(int N, int M){
-    int sum=0;
-    if(N==1)
-        return M;
-    else if(N==M)
-        return 1;
-    else
-    {
-        sum=bridge(N-1,M-1)+bridge(N,M-1);
-        return sum;
-    }
-    
-}
-
 int main(){
-    int T, N, M;
+    int T;
+    double N, M;
     cin>>T;
-    int sum[T];
-    for(int j=0;j<T;j++)
-    {
-        cin>>N>>M;
-        sum[j]=bridge(N, M);
-    }
-    for(int i=0;i<T;i++)
-        cout<<sum[i]<<"\n";
+    double ans[T];
     
+    for(int i=0;i<T;i++){
+        ans[i]=1;
+        cin>>N>>M;
+        for(int j=0;j<N;j++) ans[i]*=(M-j)/(N-j);
+    }
+    for(int i=0;i<T;i++){
+        printf("%.0lf\n",ans[i]);
+    }
     return 0;
 }
