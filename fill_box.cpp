@@ -9,33 +9,25 @@
 using namespace std;
 int A[20],B[20], n;
 int ans=0;
-bool possible=true;
 void fill_box(int l, int w, int h){
-    cout<<"l : "<<l<<",  w : "<<w<<",   h : "<<h<<"\n";
-    int cube=0, idx=0;
-    if(possible==false)
+    //cout<<"l : "<<l<<",    w : "<<w<<",    h : "<<h<<",    ans : "<<ans<<"\n";
+    if(ans==-1)
         return;
     
     if(l==0||w==0||h==0)
         return;
     
-    for(int i=n-1;i>=0;i--){    //박스에 들어갈 수 있는 큐브중 가장 큰 큐브 찾기
-        if(1<<A[i]<=l&&1<<A[i]<=w&&1<<A[i]<=h){
-            cube=1<<A[i];
-            idx=i;
-            break;
+    for(int i=n-1;i>=0;i--){
+        if(A[i]<=l && A[i]<=w && A[i]<=h && B[i]>0){
+            B[i]--;
+            ans++;
+            fill_box(l-A[i], A[i], A[i]);
+            fill_box(l, A[i], h-A[i]);
+            fill_box(l, w-A[i], h);
+            return;
         }
     }
-    if((l/cube)*(w/cube)*(h/cube)>B[idx]){  //남아있는 큐브 갯수가 필요한 갯수보다 모자라면 종료
-        cout<<"-1"<<"\n";
-        possible=false;
-        return;
-    }
-    ans+=(l/cube)*(w/cube)*(h/cube);
-    fill_box(l%cube, cube, cube);
-    fill_box(l, cube, h%cube);
-    fill_box(l, w%cube, h);
-    
+    ans=-1;
 }
 
 int main(){
@@ -45,6 +37,7 @@ int main(){
     cin>>n;
     for(int i=0;i<n;i++){
         cin>>A[i]>>B[i];
+        A[i]=1<<A[i];
     }
     
     fill_box(l, w, h);
