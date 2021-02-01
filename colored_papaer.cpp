@@ -20,10 +20,10 @@ void cut(int x, int y, int N){
                 break;
             }
         }
-        if(same==false)
+        if(same==false)     //색종이가 모두 같은 색은 아니면 false
             break;
     }
-    if(same==true) {
+    if(same==true) {        //색종이가 모두 같은 색이면 그 색의 갯수를 더하고 리턴
         color[temp-'0']++;
         return;
     }
@@ -34,7 +34,6 @@ void cut(int x, int y, int N){
         cut(x+N/2,y+N/2,N/2);
     }
 }
-
 int main(){
     int N;
     cin>>N;
