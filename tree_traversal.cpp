@@ -32,6 +32,7 @@ public:
     void inorder(TreeNode *CurrentNode);
     void postorder(TreeNode *CurrentNode);
     void insert(TreeNode *CurrentNode, char parent, char left, char right);
+    TreeNode* getRoot(){return root;}
 private:
     TreeNode *root;
 };
@@ -61,14 +62,22 @@ void Tree::postorder(TreeNode *CurrentNode){
 }
 
 void Tree::insert(TreeNode *CurrentNode, char parent, char left, char right){
+    if(CurrentNode->data>parent) return;
     if(CurrentNode->data==parent){
-        if(left!=0){
-        TreeNode* left_node=new TreeNode(left);
+        if(left!='.'){
+            TreeNode* left_node=new TreeNode(left);
+            CurrentNode->LeftChild=left_node;
         }
-        if(right!=0){
-        TreeNode* right_node=new TreeNode(right);
+        if(right!='.'){
+            TreeNode* right_node=new TreeNode(right);
+            CurrentNode->RightChild=right_node;
         }
     }
+    else{
+        if(CurrentNode->LeftChild) insert(CurrentNode->LeftChild,parent,left,right);
+        if(CurrentNode->RightChild) insert(CurrentNode->RightChild,parent,left,right);
+    }
+    return;
 }
 
 int main(){
@@ -80,9 +89,14 @@ int main(){
     for(int i=0;i<n;i++){
         char root,left,right;
         cin>>root>>left>>right;
-        
+        tree.insert(tree.getRoot(), root, left, right);
     }
-    
+    tree.preorder(tree.getRoot());
+    cout<<"\n";
+    tree.inorder(tree.getRoot());
+    cout<<"\n";
+    tree.postorder(tree.getRoot());
+    cout<<"\n";
     
     return 0;
 }
