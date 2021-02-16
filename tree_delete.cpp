@@ -6,115 +6,71 @@
 //  acmicpc.net/problem/1068
 
 #include <iostream>
-
+#include <vector>
+#include <queue>
 using namespace std;
-int cnt=0;
-class Tree;
-class TreeNode{
-    friend class Tree;
-private:
-    TreeNode *LeftChild;
-    int data;
-    TreeNode *RightChild;
-public:
-    TreeNode(int data=0, TreeNode* left=0, TreeNode* right=0){
-        this->data=data;
-        this->LeftChild=left;
-        this->RightChild=right;
-    }
-};
-class Tree{
-public:
-    Tree(int data=0){
-        root= new TreeNode(data);
-    }
-    void preorder(TreeNode* CurrentNode);
-    void insert(TreeNode *CurrentNode, int parentNode, int data);
-    void delete_node(TreeNode *CurrentNode, int data);
-    void count_leaf(TreeNode* CurrentNode);
-    TreeNode* getRoot(){return root;}
-private:
-    TreeNode *root;
-};
 
-void Tree::preorder(TreeNode *CurrentNode){
-    if(CurrentNode){
-        cout<<CurrentNode->data;
-        preorder(CurrentNode->LeftChild);
-        preorder(CurrentNode->RightChild);
+vector<vector<int>> v;
+queue<int> q;
+int parent[50];
+int leaf_node=0;
+void delete_node(int node){
+    q.push(node);
+    
+    for(int i=0;i<v[parent[node]].size();i++){
+        if(v[parent[node]][i]==node) {
+            v[parent[node]].erase(v[parent[node]].begin()+i);
+            break;
+        }
+    }
+    while(!q.empty()){
+        int temp = q.front();
+        q.pop();
+        
+        for(int i=0;i<v[temp].size();i++){
+            q.push(v[temp][i]);
+        }
+        v[temp].clear();
     }
 }
 
-
-void Tree::insert(TreeNode *CurrentNode, int parentNode, int data){
-    if(CurrentNode->data>parentNode) return;
+void count_leaf(int root){
+    q.push(root);
     
-    if(CurrentNode->data==parentNode){
-        if(CurrentNode->LeftChild==0){
-            TreeNode* leftNode=new TreeNode(data);
-            CurrentNode->LeftChild=leftNode;
+    while(!q.empty()){
+        int temp=q.front();
+        q.pop();
+        
+        if(v[temp].size()==0){
+            leaf_node++;
+            continue;
         }
         else{
-            TreeNode* rightNode=new TreeNode(data);
-            CurrentNode->RightChild=rightNode;
+            for(int i=0;i<v[temp].size();i++){
+                q.push(v[temp][i]);
+            }
         }
     }
-    else{
-        insert(CurrentNode->LeftChild, parentNode, data);
-        insert(CurrentNode->RightChild, parentNode, data);
-    }
-    return;
 }
-
-void Tree::delete_node(TreeNode *CurrentNode, int data){
-    if(CurrentNode->LeftChild->data==data){
-        CurrentNode->LeftChild=0;
-        delete CurrentNode->LeftChild;
-    }
-    else if(CurrentNode->RightChild->data==data){
-        CurrentNode->RightChild=0;
-        delete CurrentNode->RightChild;
-    }
-    else{
-    delete_node(CurrentNode->LeftChild,data);
-    delete_node(CurrentNode->RightChild, data);
-    }
-    return;
-}
-
-void Tree::count_leaf(TreeNode *CurrentNode){
-    if(!CurrentNode->LeftChild && !CurrentNode->RightChild) cnt++;
-    
-    else{
-        count_leaf(CurrentNode->LeftChild);
-        count_leaf(CurrentNode->RightChild);
-    }
-    return;
-}
-
 
 int main(){
-    int n, num;
+    int n, root=0, node;
     cin>>n;
-    int arr[n];
-    Tree tree(0);
-
+    
+    for(int i=0;i<n;i++) v.push_back(vector<int>());
+    
     for(int i=0;i<n;i++){
-        cin>>arr[i];
-        if(i>0){
-            tree.insert(tree.getRoot(), arr[i],i);
-        }
+        cin>>parent[i];
+        if(parent[i]==-1) root=i;
+        else v[parent[i]].push_back(i);
     }
-    tree.preorder(tree.getRoot());
-    cout<<"\n";
-    cin>>num;
-    
-    tree.delete_node(tree.getRoot(), num);
-    tree.preorder(tree.getRoot());
-    cout<<"\n";
-    tree.count_leaf(tree.getRoot());
-    
-    cout<<cnt<<"\n";
+    cin>>node;
+    if(node==root) cout<<0<<"\n";
+    else{
+    delete_node(node);
+    count_leaf(root);
+    cout<<leaf_node<<"\n";
+    }
     
     return 0;
 }
