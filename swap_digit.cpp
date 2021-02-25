@@ -16,10 +16,11 @@ vector<int> v, max_v;
 queue<pair<int, vector<int>>> q;
 int k;
 
-void v_swap(vector<int> v, int a, int b){
-    int temp=v[a];
+vector<int> v_swap(vector<int> v, int a, int b){
+    int tmp=v[a];
     v[a]=v[b];
-    v[b]=temp;
+    v[b]=tmp;
+    return v;
 }
 
 bool v_same_check(vector<int> v1, vector<int> v2){
@@ -37,20 +38,21 @@ void bfs(){
     q.push(make_pair(0, v));
     
     while(!q.empty()){
+        
         if(q.front().first==k) return;
         
         if(v_same_check(max_v, q.front().second)) return;
         
-        vector<int> temp(q.front().second);
+        vector<int> temp=q.front().second;
         int idx=q.front().first;
         q.pop();
-        for(int i=(int)temp.size()-1;i>=0;i++){
+        for(int i=(int)temp.size()-1;i>=0;i--){
             if(temp[i]!=max_v[i]){
                 for(int j=i;j>=0;j--){
                     if(temp[j]==max_v[i]){
-                        v_swap(temp, i,j);
-                        q.push(make_pair(idx+1, temp));
-                        v_swap(temp,i,j);
+                        temp=v_swap(temp, i, j);
+                        if(temp[temp.size()-1]!=0) q.push(make_pair(idx+1, temp));
+                        temp=v_swap(temp, i, j);
                     }
                 }
                 break;
@@ -75,6 +77,7 @@ int main(){
     
     bfs();
     int max_num=0;
+    
     if(q.front().first==k){
         while(!q.empty()){
             int tmp_num=0;
@@ -87,21 +90,21 @@ int main(){
         }
     }
     else{
-        bool check=false;
-        int count[10];
-        for(int i=0;i<10;i++){
-            count[i]=0;
-        }
+        int count=0;
         for(int i=0;i<max_v.size();i++){
-            count[max_v[i]]++;
+            if(max_v[i]!=0) count++;
         }
-        for(int i=0;i<10;i++){
-            if(count[i]>1) check=true;
+        
+        if(count<=1) {
+            cout<<"-1\n";
+            return 0;
         }
-        if(!check || (k-q.front().first)%2!=0){
-            v_swap(max_v, 0, 1);
+        
+        if((k-q.front().first)%2!=0){
+            max_v=v_swap(max_v, 0, 1);
         }
-        int max_num=0;
+        
+        max_num=0;
         for(int i=(int)max_v.size()-1;i>=0;i--){
             max_num+=max_v[i]*pow(10,i);
         }
